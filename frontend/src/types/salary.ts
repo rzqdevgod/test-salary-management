@@ -13,6 +13,6 @@ export interface Salary {
 export interface SalaryFormData {
   name: string;
   email: string;
-  salary_local: number;
-  salary_euros: number;
+  salary_local: number | null;
+  salary_euros: number | null;
 } 

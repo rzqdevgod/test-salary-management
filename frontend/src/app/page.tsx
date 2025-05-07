@@ -1,12 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import SalaryForm from '@/components/SalaryForm';
 import { SalaryFormData } from '@/types/salary';
+import toast from 'react-hot-toast';
 
 export default function Home() {
-  const [message, setMessage] = useState<string>('');
-
   const handleSubmit = async (data: SalaryFormData) => {
     try {
       const response = await fetch('http://localhost:8000/api/salary', {
@@ -21,10 +19,11 @@ export default function Home() {
         throw new Error('Failed to submit salary data');
       }
 
-      setMessage('Salary data submitted successfully!');
+      toast.success('Salary details submitted successfully!');
     } catch (error) {
-      setMessage('Error submitting salary data. Please try again.');
       console.error('Error:', error);
+      toast.error('Error submitting salary data. Please try again.');
+      throw error;
     }
   };
 
@@ -35,17 +34,6 @@ export default function Home() {
           <h1 className="text-3xl font-bold text-gray-900">Salary Management System</h1>
           <p className="mt-2 text-gray-600">Submit your salary details below</p>
         </div>
-
-        {message && (
-          <div
-            className={`mb-4 p-4 rounded-md ${message.includes('Error')
-                ? 'bg-red-50 text-red-700'
-                : 'bg-green-50 text-green-700'
-              }`}
-          >
-            {message}
-          </div>
-        )}
 
         <SalaryForm onSubmit={handleSubmit} />
       </div>

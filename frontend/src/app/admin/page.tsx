@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import SalaryTable from '@/components/SalaryTable';
 import { Salary } from '@/types/salary';
+import toast from 'react-hot-toast';
 
 export default function AdminPage() {
   const [salaries, setSalaries] = useState<Salary[]>([]);
-  const [message, setMessage] = useState<string>('');
 
   const fetchSalaries = async () => {
     try {
@@ -18,7 +18,7 @@ export default function AdminPage() {
       setSalaries(data);
     } catch (error) {
       console.error('Error fetching salaries:', error);
-      setMessage('Error loading salary data. Please try again.');
+      toast.error('Error loading salary data. Please try again.');
     }
   };
 
@@ -40,11 +40,11 @@ export default function AdminPage() {
         throw new Error('Failed to update salary data');
       }
 
-      setMessage('Salary data updated successfully!');
+      toast.success('Salary updated successfully!');
       fetchSalaries(); // Refresh the data
     } catch (error) {
       console.error('Error updating salary:', error);
-      setMessage('Error updating salary data. Please try again.');
+      toast.error('Error updating salary data. Please try again.');
     }
   };
 
@@ -55,17 +55,6 @@ export default function AdminPage() {
           <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
           <p className="mt-2 text-gray-600">Manage salary records</p>
         </div>
-
-        {message && (
-          <div
-            className={`mb-4 p-4 rounded-md ${message.includes('Error')
-                ? 'bg-red-50 text-red-700'
-                : 'bg-green-50 text-green-700'
-              }`}
-          >
-            {message}
-          </div>
-        )}
 
         <div className="bg-white shadow-md rounded-lg p-6">
           <SalaryTable salaries={salaries} onUpdate={handleUpdate} />
